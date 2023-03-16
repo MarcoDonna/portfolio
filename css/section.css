@@ -1,0 +1,13 @@
+section{
+    padding: 2em 1.2em;
+}
+
+section h1{
+    font-weight: 600;
+    font-size: 2em;
+}
+
+section article{
+    font-size: 1.1em;
+    line-height: 1.1em;
+}
