@@ -1,0 +1,16 @@
+.cards-list{
+    padding: 0 1.2em;
+}
+
+.cards-list li{
+    margin: 2em 0;
+
+    list-style: none;
+
+    font-size: 1.1em;
+    line-height: 1.15em;
+}
+
+.cards-list li h2{
+    font-weight: 600;
+}
