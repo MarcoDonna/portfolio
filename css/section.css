@@ -13,7 +13,7 @@ section article{
 }
 
 section details{
-    margin-left: 1em;
+    margin: 1em;
 }
 
 section summary{
@@ -30,3 +30,12 @@ section details li{
     line-height: 1.6em;
 }
 
+section details table{
+    margin: 0.2em 0.5em;
+}
+
+section table td{
+    padding: 0 0.5em;
+
+    font-size: 1.1em;
+}
