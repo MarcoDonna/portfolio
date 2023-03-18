@@ -1,8 +1,6 @@
 html{
     -ms-overflow-style: none;
     scrollbar-width: none;
-
-    
 }
 
 html::-webkit-scrollbar{
@@ -10,6 +8,6 @@ html::-webkit-scrollbar{
 }
 
 body{
-    font-family: 'Sono', sans-serif;
+    font-family: 'Courier', serif;
 }
 
