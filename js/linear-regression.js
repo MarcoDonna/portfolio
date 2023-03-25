@@ -1,0 +1,77 @@
+class LinearRegression{
+    #data
+    #slope
+    #offset
+
+    constructor(data){
+        this.data = data;
+
+        this.#slope = 1;
+        this.#offset = 0;
+    }
+
+    get data(){
+        return this.#data;
+    }
+
+    set data(data){
+        return this.#data = data;
+    }
+
+    get slope(){
+        return this.#slope;
+    }
+
+    get offset(){
+        return -this.#offset;
+    }
+
+    get mse(){
+        return this.meanSquaredError();
+    }
+
+    train(epochs, learningRate){
+        if(!epochs || epochs <= 0 || !learningRate)
+            throw new Error("Invalid epochs or learningrate");
+
+        for(let i = 1; i <= epochs; i++){
+            const slopeDerivative = this.#mseSlopeDerivative();
+            this.#adjustSlope(learningRate, slopeDerivative);
+            const offsetDerivative = this.#mseOffsetDerivative();
+            this.#adjustOffset(learningRate, offsetDerivative);
+        }
+
+        return {slope: this.slope, offset: this.offset};
+    }
+
+    meanSquaredError(){
+        let mse = 0;
+        for(let i = 0; i < this.#data.length; i++)
+            mse += Math.pow(this.#data[i][1] - this.#slope * this.data[i][0] + this.#offset, 2);
+        return mse / this.#data.length;
+    }
+
+    #mseSlopeDerivative(){
+        let derivative = 0;
+        for(let i = 0; i < this.#data.length; i++)
+            derivative += this.#data[i][0] * (this.#slope * this.#data[i][0] - this.#data[i][1] - this.#offset);
+        return 2 / this.#data.length * derivative;
+    }
+
+    #mseOffsetDerivative(){
+        let derivative = 0;
+        for(let i = 0; i < this.#data.length; i++)
+            derivative += this.#data[i][1] - this.#slope * this.data[i][0] + this.#offset;
+        return 2 / this.#data.length * derivative;
+    }
+
+    #adjustSlope(learningRate, slopeDerivative){
+        const delta = -Math.abs(learningRate) * slopeDerivative;
+        this.#slope += delta;
+    }
+
+    #adjustOffset(learningRate, offsetDerivative){
+        const delta = -Math.abs(learningRate) * offsetDerivative;
+        this.#offset += delta;
+    }
+}
