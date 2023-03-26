@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear regression</title>
+
+    <!--Bootrap-5.3.0-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+    <!--JQuery-3.6.4-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+    <!--Chart.js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="js/data-generation.js"></script>
+    <script src="js/linear-regression.js"></script>
+
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/header-small.css" rel="stylesheet">
+    <link href="css/section.css" rel="stylesheet">
+
+</head>
+<body>
+    <header class="row">
+        <div class="col-1 col-lg-2"></div>
+        <div class="col-10 col-lg-8 d-flex flex-column align-items-start justify-content-center">
+            <h1>Linear regression</h1>
+            <h2>Description of project</h2>
+        </div>
+        <div class="col-1 col-lg-2"></div>
+    </header>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Project explanation</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc.
+            </p>
+            <p>
+                Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
+            </p>
+        </div>
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+    </section>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Data and results</h1>
+            <canvas id="linear-regression-chart"></canvas>
+        </div>
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+    </section>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Data configuration</h1>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Number of points</span>
+                <input type="number" class="form-control" id="gen-points-number" value="50" min="0" max="1000">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Randomness</span>
+                <input type="number" class="form-control" id="gen-randomness" value="0.2" step="0.1" max="2" min="0">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Set slope</span>
+                <span class="input-group-text">
+                    <input class="form-check-input mt-0" id="gen-fixed-slope" type="checkbox">
+                </span>
+                <input type="number" class="form-control" id="gen-slope" value="1">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Set offset</span>
+                <span class="input-group-text">
+                    <input class="form-check-input mt-0" id="gen-fixed-offset" type="checkbox">
+                </span>
+                <input type="number" class="form-control" id="gen-offset" value="0">
+            </div>
+            <div class="input-group mb-3">
+                <button type="button" class="btn btn-primary" id="gen">Generate data</button>
+            </div>
+        </div>
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+    </section>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Training configuration</h1>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Epochs</span>
+                <input type="number" class="form-control" id="train-epochs" value="1000" min="0" max="100000">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Learning rate</span>
+                <input type="number" class="form-control" id="train-learning-rate" value="0.1" step="0.01" max="1" min="0">
+            </div>
+            <div class="input-group mb-3">
+                <button type="button" class="btn btn-primary" id="train">Train model</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const ctx = document.getElementById('linear-regression-chart');
+        let chart;
+
+        function renderChart(scatterData, yValueStart, yValueEnd){
+            if(chart)
+                chart.destroy();
+
+            chart = new Chart(ctx, {
+                data: {
+                    labels: [0, 1],
+                    datasets: [
+                        scatterDataset(scatterData, 'Generated data'),
+                        line([yValueStart, yValueEnd], 'Result')
+                    ]
+                }
+            });
+        }
+
+        function scatterDataset(data, label){
+            return {
+                type: 'scatter',
+                label,
+                order: 1,
+                data: toXYObject(data)
+            }
+        }
+
+        function line(data, label){
+            return {
+                type: 'line',
+                label,
+                order: 0,
+                data
+            }
+        }
+
+        function toXYObject(data){
+            return data.map(row => {return {x: row[0], y: row[1]}})
+        }
+
+        let trainingData;
+
+        $('#gen').on('click', ev => {
+            const pointsNumber = $('#gen-points-number').val();
+            const randomness = $('#gen-randomness').val();
+
+            const slope = $('#gen-fixed-slope').is(':checked') ? parseFloat($('#gen-slope').val()) :  -4 + Math.random() * 8;
+            const offset = $('#gen-fixed-offset').is(':checked') ? parseFloat($('#gen-offset').val()) :  -4 + Math.random() * 8;
+
+            trainingData = linearData(pointsNumber, slope, offset, randomness);
+            renderChart(trainingData);
+        });
+
+        $('#train').on('click', ev => {
+            if(!trainingData)
+                return;
+
+            const epochs = $('#train-epochs').val();
+            const learningRate = $('#train-learning-rate').val();
+
+            let model = new LinearRegression(trainingData);
+            model.train(epochs, learningRate);
+            renderChart(trainingData, model.predict(0), model.predict(1));
+        });
+
+        $(() => $('#gen').trigger('click'));
+    </script>
+</body>
+</html>
