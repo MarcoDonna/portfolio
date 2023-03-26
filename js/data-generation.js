@@ -13,7 +13,7 @@ function linearData(points, slope=1, offset=0, randomness=0){
     let ret = [];
     for(let i = 0; i < points; i++){
         const x = Math.random();
-        const y = slope * x + offset + Math.random() * randomness;
+        const y = slope * x + offset + (-randomness/2 + Math.random() * randomness);
         ret.push([x, y]);
     }
     return ret;
