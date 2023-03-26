@@ -10,10 +10,6 @@ class LinearRegression{
         this.#offset = 0;
     }
 
-    get data(){
-        return this.#data;
-    }
-
     set data(data){
         return this.#data = data;
     }
@@ -27,7 +23,7 @@ class LinearRegression{
     }
 
     get mse(){
-        return this.meanSquaredError();
+        return this.#meanSquaredError();
     }
 
     train(epochs, learningRate){
@@ -40,28 +36,30 @@ class LinearRegression{
             const offsetDerivative = this.#mseOffsetDerivative();
             this.#adjustOffset(learningRate, offsetDerivative);
         }
-
-        return {slope: this.slope, offset: this.offset};
     }
 
-    meanSquaredError(){
+    predict(x){
+        return this.slope * x + this.offset;
+    }
+
+    #meanSquaredError(){
         let mse = 0;
         for(let i = 0; i < this.#data.length; i++)
-            mse += Math.pow(this.#data[i][1] - this.#slope * this.data[i][0] + this.#offset, 2);
+            mse += Math.pow(this.#data[i][1] - this.#slope * this.#data[i][0] + this.#offset, 2);
         return mse / this.#data.length;
     }
 
     #mseSlopeDerivative(){
         let derivative = 0;
         for(let i = 0; i < this.#data.length; i++)
-            derivative += this.#data[i][0] * (this.#slope * this.#data[i][0] - this.#data[i][1] - this.#offset);
+            derivative += (this.predict(this.#data[i][0]) - this.#data[i][1]) * this.#data[i][0];
         return 2 / this.#data.length * derivative;
     }
 
     #mseOffsetDerivative(){
         let derivative = 0;
         for(let i = 0; i < this.#data.length; i++)
-            derivative += this.#data[i][1] - this.#slope * this.data[i][0] + this.#offset;
+            derivative += this.#data[i][1] - this.predict(this.#data[i][0]);
         return 2 / this.#data.length * derivative;
     }
 
