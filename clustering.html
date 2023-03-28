@@ -51,9 +51,16 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Data and results</h1>            
+            <h1>Data and results</h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" id="show-raw">Generated data</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="show-processed">Processed data</a>
+              </ul>
             <canvas id="clustering-raw-chart"></canvas>
-            <canvas id="clustering-processed-chart"></canvas>
+            <canvas class="d-none" id="clustering-processed-chart"></canvas>
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
@@ -141,6 +148,7 @@
                 data = [...data, ...clusterData(points, Math.random(), Math.random(), radius)];
 
             renderChartRaw(data);
+            switchToRawTab();
         });
 
         $('#split').on('click', ev => {
@@ -153,6 +161,29 @@
             let groups = [{data: kmean.centroids, label: 'centroids'}];
             groups = [...groups, ...kmean.groups.map((g, idx) => {return {data: g, label: `${g.length} points`}})];
             renderChartProcessed(groups);
+            switchToProcessedTab();
+        });
+
+        function switchToRawTab(){
+            $('#show-raw').addClass('active');
+            $('#show-processed').removeClass('active');
+            $('#clustering-raw-chart').removeClass('d-none');
+            $('#clustering-processed-chart').addClass('d-none');
+        }
+
+        function switchToProcessedTab(){
+            $('#show-raw').removeClass('active');
+            $('#show-processed').addClass('active');
+            $('#clustering-raw-chart').addClass('d-none');
+            $('#clustering-processed-chart').removeClass('d-none');
+        }
+
+        $('#show-raw').on('click', ev => {
+            switchToRawTab();
+        });
+
+        $('#show-processed').on('click', ev => {
+            switchToProcessedTab();
         });
 
     </script>
