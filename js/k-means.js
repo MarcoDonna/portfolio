@@ -16,6 +16,10 @@ class KMeans{
         return this.#groups;
     }
 
+    get centroids(){
+        return this.#centroids;
+    }
+
     split(epochs, groupsNumber){
         if(!epochs || epochs < 0 || !groupsNumber || groupsNumber < 1)
             throw new Error("Invalid epochs or number of groups");
