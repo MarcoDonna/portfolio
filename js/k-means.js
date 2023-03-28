@@ -20,7 +20,7 @@ class KMeans{
         if(!epochs || epochs < 0 || !groupsNumber || groupsNumber < 1)
             throw new Error("Invalid epochs or number of groups");
 
-        if(!this.#data || this.#data.length < 0)
+        if(!this.#data || this.#data.length < 1)
             throw new Error("No data passed to KMeans");
 
         this.#groupsNumber = groupsNumber;
