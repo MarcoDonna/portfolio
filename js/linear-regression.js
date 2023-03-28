@@ -2,12 +2,15 @@ class LinearRegression{
     #data
     #slope
     #offset
+    #mseProgress
 
     constructor(data){
         this.data = data;
 
         this.#slope = 1;
         this.#offset = 0;
+
+        this.#mseProgress = [];
     }
 
     set data(data){
@@ -26,15 +29,22 @@ class LinearRegression{
         return this.#meanSquaredError();
     }
 
-    train(epochs, learningRate){
+    get mseTrainingProgress(){
+        return this.#mseProgress;
+    }
+
+    train(epochs, learningRate, mseIterations=50){
         if(!epochs || epochs <= 0 || !learningRate)
             throw new Error("Invalid epochs or learningrate");
 
-        for(let i = 1; i <= epochs; i++){
+        for(let i = 0; i <= epochs; i++){
             const slopeDerivative = this.#mseSlopeDerivative();
             this.#adjustSlope(learningRate, slopeDerivative);
             const offsetDerivative = this.#mseOffsetDerivative();
             this.#adjustOffset(learningRate, offsetDerivative);
+
+            if(i%mseIterations == 0)
+                this.#mseProgress.push(this.#meanSquaredError());
         }
     }
 
