@@ -53,6 +53,7 @@
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1>Data and results</h1>
             <canvas id="linear-regression-chart"></canvas>
+            <canvas id="metrics-chart"></canvas>            
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
@@ -109,20 +110,44 @@
     </section>
 
     <script>
-        const ctx = document.getElementById('linear-regression-chart');
-        let chart;
+        const ctxData = document.getElementById('linear-regression-chart');
+        const ctxMetrics = document.getElementById('metrics-chart');
+        let chartData;
+        let chartMetrics;
 
-        function renderChart(scatterData, yValueStart, yValueEnd){
-            if(chart)
-                chart.destroy();
+        function renderChartData(scatterData, yValueStart, yValueEnd){
+            if(chartData)
+                chartData.destroy();
 
-            chart = new Chart(ctx, {
+            chartData = new Chart(ctxData, {
                 data: {
                     labels: [0, 1],
                     datasets: [
                         scatterDataset(scatterData, 'Generated data'),
                         line([yValueStart, yValueEnd], 'Result')
                     ]
+                }
+            });
+        }
+
+        function renderMetrics(progress){
+            if(chartMetrics)
+                chartMetrics.destroy();
+
+            let labels = [];
+
+            for(let i = 0; i < progress.length; i++)
+                labels.push(progress.length < 10 ? `epoch: ${i} ` : `${i * 10}%`);
+            
+
+            chartMetrics = new Chart(ctxMetrics, {
+                type: 'line',
+                data:{
+                    labels,
+                    datasets:[{
+                        label: 'Mean Squared Error (MSE)',
+                        data: progress
+                    }]
                 }
             });
         }
@@ -159,7 +184,7 @@
             const offset = $('#gen-fixed-offset').is(':checked') ? parseFloat($('#gen-offset').val()) :  -4 + Math.random() * 8;
 
             trainingData = linearData(pointsNumber, slope, offset, randomness);
-            renderChart(trainingData);
+            renderChartData(trainingData);
         });
 
         $('#train').on('click', ev => {
@@ -168,10 +193,12 @@
 
             const epochs = $('#train-epochs').val();
             const learningRate = $('#train-learning-rate').val();
+            const progressStep = Math.floor(epochs/10) < 1 ? 1 : Math.floor(epochs/10);
 
             let model = new LinearRegression(trainingData);
-            model.train(epochs, learningRate);
-            renderChart(trainingData, model.predict(0), model.predict(1));
+            model.train(epochs, learningRate, progressStep);
+            renderChartData(trainingData, model.predict(0), model.predict(1));
+            renderMetrics(model.mseTrainingProgress);
         });
 
         $(() => $('#gen').trigger('click'));
