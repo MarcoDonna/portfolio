@@ -52,8 +52,15 @@
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1>Data and results</h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" id="show-data">Data and results</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="show-metrics">Metrics</a>
+              </ul>
             <canvas id="linear-regression-chart"></canvas>
-            <canvas id="metrics-chart"></canvas>            
+            <canvas class="d-none" id="metrics-chart"></canvas>            
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
@@ -200,6 +207,28 @@
             model.train(epochs, learningRate, trainingProgressStep);
             renderChartData(trainingData, model.predict(0), model.predict(1));
             renderMetrics(model.mseTrainingProgress);
+        });
+
+        function switchToDataTab(){
+            $('#show-data').addClass('active');            
+            $('#show-metrics').removeClass('active');            
+            $('#linear-regression-chart').removeClass('d-none');
+            $('#metrics-chart').addClass('d-none');
+        }
+
+        function switchToMetricsTab(){
+            $('#show-data').removeClass('active');            
+            $('#show-metrics').addClass('active');            
+            $('#linear-regression-chart').addClass('d-none');
+            $('#metrics-chart').removeClass('d-none');
+        }
+
+        $('#show-data').on('click', ev => {
+            switchToDataTab();
+        });
+
+        $('#show-metrics').on('click', ev => {
+            switchToMetricsTab();
         });
 
         $(() => $('#gen').trigger('click'));
