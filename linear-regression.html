@@ -137,7 +137,7 @@
             let labels = [];
 
             for(let i = 0; i < progress.length; i++)
-                labels.push(progress.length < 10 ? `epoch: ${i} ` : `${i * 10}%`);
+                labels.push(progress.length == 11 ? `${i * 10}%` : i);
             
 
             chartMetrics = new Chart(ctxMetrics, {
@@ -193,10 +193,11 @@
 
             const epochs = $('#train-epochs').val();
             const learningRate = $('#train-learning-rate').val();
-            const progressStep = Math.floor(epochs/10) < 1 ? 1 : Math.floor(epochs/10);
+
+            const trainingProgressStep = Math.floor(epochs/10) ==  0 ? 1 : Math.floor(epochs/10);
 
             let model = new LinearRegression(trainingData);
-            model.train(epochs, learningRate, progressStep);
+            model.train(epochs, learningRate, trainingProgressStep);
             renderChartData(trainingData, model.predict(0), model.predict(1));
             renderMetrics(model.mseTrainingProgress);
         });

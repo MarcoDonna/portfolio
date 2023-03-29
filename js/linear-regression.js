@@ -37,7 +37,9 @@ class LinearRegression{
         if(!epochs || epochs <= 0 || !learningRate)
             throw new Error("Invalid epochs or learningrate");
 
-        for(let i = 0; i <= epochs; i++){
+        this.#mseProgress.push(this.#meanSquaredError());
+
+        for(let i = 1; i <= epochs; i++){
             const slopeDerivative = this.#mseSlopeDerivative();
             this.#adjustSlope(learningRate, slopeDerivative);
             const offsetDerivative = this.#mseOffsetDerivative();
