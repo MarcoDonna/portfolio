@@ -10,11 +10,19 @@ class ConfusionMatrix{
     }
 
     get matrix(){
-        return this.#matrix || this.#computeMatrix();
+        return this.#computeMatrix();
     }
 
     get labels(){
-        return this.#labels || this.#distinct()
+        return this.#distinct()
+    }
+
+    get precision(){
+        return this.#precision();
+    }
+
+    get recall(){
+        return this.#recall();
     }
 
     #computeMatrix(){
@@ -58,5 +66,25 @@ class ConfusionMatrix{
                 distinctValues.push(this.#predicted[i]);
         
         return distinctValues;
+    }
+
+    #precision(){
+        //TruePositive/(TruePositive+FalsePositive)
+        let precision = [];
+        for(let i = 0; i < this.#labels.length; i++){
+            const precisionValue = this.#matrix[i][i] / this.#matrix.map(row => row[i]).reduce((sum, value) => sum + value);
+            precision.push(precisionValue);
+        }
+        return precision;
+    }
+
+    #recall(){
+        //TruePositive(TruePositive+FalseNegative)
+        let recall = [];
+        for(let i = 0; i < this.#labels.length; i++){
+            const recallValue = this.matrix[i][i] / this.#matrix[i].reduce((sum , value) => sum + value);
+            recall.push(recallValue);
+        }
+        return recall;
     }
 }
