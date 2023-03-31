@@ -25,6 +25,10 @@ class ConfusionMatrix{
         return this.#recall();
     }
 
+    get f1score(){
+        return this.#f1score();
+    }
+
     #computeMatrix(){
         if(this.#actual.length != this.#predicted.length)
             throw new Error('Number of prediction != Number of actual');
@@ -86,5 +90,19 @@ class ConfusionMatrix{
             recall.push(recallValue);
         }
         return recall;
+    }
+
+    #f1score(){
+        let score = [];
+
+        const precision = this.#precision();
+        const recall = this.#recall();
+
+        for(let i = 0; i < precision.length; i++){
+            let scoreValue = 2 * (precision[i] * recall[i] / (precision[i] + recall[i]));
+            score.push(scoreValue);
+        }
+
+        return score;
     }
 }
