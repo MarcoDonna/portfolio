@@ -35,3 +35,22 @@ function clusterData(points, centerX, centerY, radius){
     }
     return ret;
 }
+
+function split(data, n){
+    const amount = Math.floor(data.length * n);
+
+    let tail = [...data];
+    let head = [];
+    for(let i = 0; i < amount; i++)
+        head.push(...tail.splice(0, 1));
+
+    return [head, tail];
+}
+
+function shuffle(data){
+    for(let i = 0; i < data.length; i++){
+        let randomIndex = Math.floor(Math.random() * data.length);
+        [data[i], data[randomIndex]] = [data[randomIndex], data[i]];
+    }
+    return data;
+}
