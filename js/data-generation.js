@@ -1,10 +1,13 @@
-function loadCSV(url, delimiter=','){
+function loadCSV(url){
+    if(!window.jQuery || !window.jQuery.csv)
+        throw new Error('No jQuery or jQuery CSV plugin')
+
     return new Promise((resolve, reject) => {
         $.ajax({
             url,
             method: "GET"
         })
-        .done(res => resolve(res.split(delimiter)))
+        .done(res => resolve($.csv.toObjects(res)))
         .fail(err => reject(err));
     });
 }
