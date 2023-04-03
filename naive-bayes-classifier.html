@@ -82,6 +82,24 @@
 
     <script>
 
+        function confusionMatrix(labels, matrix){
+            let $table = $('<table/>').addClass('table');
+
+            let $head = $('<tr/>').append($('<th/>').html('Actual \\ Predicted'));
+            for(let i = 0; i < labels.length; i++)
+                $head.append($('<th/>').html(labels[i]));
+            $table.append($head);
+
+            for(let i = 0; i < labels.length; i++){
+                $row = $('<tr/>').append($('<th/>').html(labels[i]));
+                for(let j = 0; j < labels.length; j++)
+                    $row.append($('<td/>').html(matrix[i][j]));
+                $table.append($row);
+            }
+
+            return $table;
+        }
+
         async function testModel(){
             const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
             
@@ -111,7 +129,9 @@
         }
 
         (async () => {
-            await testModel();
+            const {labels, matrix} = await testModel();
+
+            $('#metrics-wrapper').append(confusionMatrix(labels, matrix));
         })();
     </script>
 </body>
