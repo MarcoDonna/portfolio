@@ -48,5 +48,71 @@
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Result metrics and data</h1>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" id="show-metrics">Metrics</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="show-data">Data</a>
+              </ul>
+              <div id="metrics-wrapper"></div>    
+              <div id="data-wrapper"></div>      
+        </div>
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+    </section>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Training configuration</h1>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Split training/testing</span>
+                <input type="number" class="form-control" id="train-split" value="0.7" min="0" max="1">
+            </div>
+            <div class="input-group mb-3">
+                <button type="button" class="btn btn-primary" id="test">Test model</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+        async function testModel(){
+            const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
+            
+            const [trainData, testData] = split(data, 0.7);
+
+            const trainPredictors = trainData.map(row => [row.Embarked, row.Pclass, row.Sex]);
+            const trainClass = trainData.map(row => row.Survived == 0 ? 'NoSurv' : 'Surv');
+            
+            const testPredictors = testData.map(row => [row.Embarked, row.Pclass, row.Sex]);
+            const testClass = testData.map(row => row.Survived == 0 ? 'NoSurv' : 'Surv');
+    
+            const classifier = new NBC(trainPredictors, trainClass);
+                            
+            let predicted = [];
+
+            for(let recordIndex = 0; recordIndex < testPredictors.length; recordIndex++)
+                predicted.push(classifier.classify(testPredictors[recordIndex]).class);
+
+            let cmat = new ConfusionMatrix(testClass, predicted);
+            console.log(cmat.labels);
+            console.log(cmat.matrix);
+            console.log(cmat.precision);
+            console.log(cmat.recall);
+            console.log(cmat.f1score);
+            
+            return cmat;
+        }
+
+        (async () => {
+            await testModel();
+        })();
+    </script>
 </body>
 </html>
