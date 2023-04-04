@@ -25,7 +25,7 @@
     <link href="css/section.css" rel="stylesheet">
 
     <style>
-        #metrics-wrapper{
+        #metrics-wrapper, #data-wrapper{
             margin: 2em auto;
         }
 
@@ -88,7 +88,7 @@
                     <div id="confusion-matrix-wrapper"></div>  
                 </details>
               </div>    
-              <div id="data-wrapper"></div>      
+              <div class="d-none" id="data-wrapper"></div>      
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
@@ -143,9 +143,41 @@
             return $table;
         }
 
+        function tableData(labels, data){
+            let $table = $('<table/>').addClass('table table-striped');
+
+            let $head = $('<tr/>')
+            for(let i = 0; i < labels.length; i++)                
+                $head.append($('<th/>').html(labels[i]));
+            $table.append($('<thead/>').addClass('table-dark').append($head));
+
+            let $body = $('<tbody/>');
+            for(let i = 0; i < 5; i++){                
+                let $row = $('<tr/>');
+                for(let j = 0; j < labels.length; j++)                
+                    $row.append($('<td/>').html(data[i][j]));
+                $body.append($row);
+            }
+            
+            let $row = $('<tr/>');
+            for(let j = 0; j < labels.length; j++)                
+                $row.append($('<td/>').html('...'));
+            $body.append($row);
+
+            $table.append($body);
+
+            return $table;
+        }
+
         async function testModel(){
             const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
             
+            const labels = ['Class', 'Sex', 'Age', 'Survived'];
+            const d = data.map(row => [row.Pclass, row.Sex, row.Age ? parseInt(row.Age) < 18 ? 'Child' : 'Adult' : 'ND', row.Survived == 0 ? 'NoSurv' : 'Surv'])
+
+            $('#data-wrapper').append(tableData(labels, d));
+            $('#data-wrapper').append(`Training with ${1234} records, testing with ${1234} records`)
+
             const [trainData, testData] = split(data, 0.7);
 
             const trainPredictors = trainData.map(row => [row.Embarked, row.Pclass, row.Sex]);
@@ -170,6 +202,23 @@
             
             return cmat;
         }
+
+        function switchToMetricsTab(){
+            $('#show-metrics').addClass('active');
+            $('#show-data').removeClass('active');
+            $('#metrics-wrapper').removeClass('d-none');
+            $('#data-wrapper').addClass('d-none');
+        }
+
+        function switchToDataTab(){
+            $('#show-metrics').removeClass('active');
+            $('#show-data').addClass('active');
+            $('#metrics-wrapper').addClass('d-none');
+            $('#data-wrapper').removeClass('d-none');
+        }
+
+        $('#show-metrics').on('click', ev => switchToMetricsTab());
+        $('#show-data').on('click', ev => switchToDataTab());
 
         (async () => {
             const {labels, matrix, precision, recall, f1score} = await testModel();
