@@ -60,7 +60,16 @@
                 <li class="nav-item">
                   <a class="nav-link" id="show-data">Data</a>
               </ul>
-              <div id="metrics-wrapper"></div>    
+              <div id="metrics-wrapper">
+                <h2>Confusion Matrix</h2>
+                <div id="confusion-matrix-wrapper"></div>                
+                <h2>Precision</h2>
+                <div id="precision-wrapper"></div>                
+                <h2>Recall</h2>
+                <div id="recall-wrapper"></div>                
+                <h2>F1 Score</h2>
+                <div id="f1score-wrapper"></div>
+              </div>    
               <div id="data-wrapper"></div>      
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
@@ -100,6 +109,22 @@
             return $table;
         }
 
+        function scoreTable(labels, values){
+            let $table = $('<table/>').addClass('table');
+
+            let $head = $('<tr/>');
+            for(let i = 0; i < labels.length; i++)
+                $head.append($('<th/>').html(labels[i]));
+            $table.append($head);
+
+            let $row = $('<tr/>');
+            for(let i = 0; i < labels.length; i++)
+                $row.append($('<th/>').html(values[i].toFixed(2)));
+            $table.append($row);
+
+            return $table;
+        }
+
         async function testModel(){
             const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
             
@@ -129,9 +154,13 @@
         }
 
         (async () => {
-            const {labels, matrix} = await testModel();
+            const {labels, matrix, precision, recall, f1score} = await testModel();
 
-            $('#metrics-wrapper').append(confusionMatrix(labels, matrix));
+            $('#confusion-matrix-wrapper').append(confusionMatrix(labels, matrix));
+            
+            $('#precision-wrapper').append(scoreTable(labels, precision));            
+            $('#recall-wrapper').append(scoreTable(labels, recall));            
+            $('#f1score-wrapper').append(scoreTable(labels, f1score));
         })();
     </script>
 </body>
