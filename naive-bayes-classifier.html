@@ -24,6 +24,22 @@
     <link href="css/header-small.css" rel="stylesheet">
     <link href="css/section.css" rel="stylesheet">
 
+    <style>
+        #metrics-wrapper{
+            margin: 2em auto;
+        }
+
+        @media (min-width: 992px){
+            #metrics-wrapper{
+                margin: 2em 2em;
+            }
+        }
+
+        section h2{
+            margin-top: 1.4em;
+        }
+    </style>
+
 </head>
 <body>
     <header class="row">
@@ -60,15 +76,17 @@
                 <li class="nav-item">
                   <a class="nav-link" id="show-data">Data</a>
               </ul>
-              <div id="metrics-wrapper">
-                <h2>Confusion Matrix</h2>
-                <div id="confusion-matrix-wrapper"></div>                
+              <div id="metrics-wrapper">              
                 <h2>Precision</h2>
                 <div id="precision-wrapper"></div>                
                 <h2>Recall</h2>
                 <div id="recall-wrapper"></div>                
                 <h2>F1 Score</h2>
                 <div id="f1score-wrapper"></div>
+                <details>
+                    <summary>Confusion Matrix</summary>
+                    <div id="confusion-matrix-wrapper"></div>  
+                </details>
               </div>    
               <div id="data-wrapper"></div>      
         </div>
@@ -92,7 +110,7 @@
     <script>
 
         function confusionMatrix(labels, matrix){
-            let $table = $('<table/>').addClass('table');
+            let $table = $('<table/>').addClass('table table-bordered');
 
             let $head = $('<tr/>').append($('<th/>').html('Actual \\ Predicted'));
             for(let i = 0; i < labels.length; i++)
@@ -110,17 +128,17 @@
         }
 
         function scoreTable(labels, values){
-            let $table = $('<table/>').addClass('table');
+            let $table = $('<table/>').addClass('table table-bordered');
 
             let $head = $('<tr/>');
             for(let i = 0; i < labels.length; i++)
                 $head.append($('<th/>').html(labels[i]));
-            $table.append($head);
+            $table.append($('<thead>').addClass('table-light').append($head));
 
             let $row = $('<tr/>');
             for(let i = 0; i < labels.length; i++)
-                $row.append($('<th/>').html(values[i].toFixed(2)));
-            $table.append($row);
+                $row.append($('<td/>').html(values[i].toFixed(2)));
+            $table.append($('<tbody>').append($row));
 
             return $table;
         }
