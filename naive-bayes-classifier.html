@@ -189,9 +189,14 @@
         $('#test').on('click', async ev => {
             const splitFraction = parseFloat($('#train-split').val());            
             
-            const dataLabels = ['Pclass', 'Sex', 'Survived'];
-            const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
-
+            const dataLabels = ['Pclass', 'Sex', 'Age', 'Survived'];
+            let data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
+            data = data.map(row => {
+                return {
+                    ...row, 
+                    Age: row['Age'] ? parseFloat(row['Age']) < 18 ? 'Child' : 'Adult' : 'ND',
+                    Survived: row['Survived'] == '1' ? 'Surv' : 'NoSurv'}
+            });
             const [trainingData, testingData] = split(data, splitFraction);
 
             const trainingDataClasses = trainingData.map(row => row[dataLabels[dataLabels.length-1]]);
