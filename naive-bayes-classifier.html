@@ -169,40 +169,6 @@
             return $table;
         }
 
-        async function testModel(){
-            const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
-            
-            const labels = ['Class', 'Sex', 'Age', 'Survived'];
-            const d = data.map(row => [row.Pclass, row.Sex, row.Age ? parseInt(row.Age) < 18 ? 'Child' : 'Adult' : 'ND', row.Survived == 0 ? 'NoSurv' : 'Surv'])
-
-            $('#data-wrapper').append(tableData(labels, d));
-            $('#data-wrapper').append(`Training with ${1234} records, testing with ${1234} records`)
-
-            const [trainData, testData] = split(data, 0.7);
-
-            const trainPredictors = trainData.map(row => [row.Embarked, row.Pclass, row.Sex]);
-            const trainClass = trainData.map(row => row.Survived == 0 ? 'NoSurv' : 'Surv');
-            
-            const testPredictors = testData.map(row => [row.Embarked, row.Pclass, row.Sex]);
-            const testClass = testData.map(row => row.Survived == 0 ? 'NoSurv' : 'Surv');
-    
-            const classifier = new NBC(trainPredictors, trainClass);
-                            
-            let predicted = [];
-
-            for(let recordIndex = 0; recordIndex < testPredictors.length; recordIndex++)
-                predicted.push(classifier.classify(testPredictors[recordIndex]).class);
-
-            let cmat = new ConfusionMatrix(testClass, predicted);
-            console.log(cmat.labels);
-            console.log(cmat.matrix);
-            console.log(cmat.precision);
-            console.log(cmat.recall);
-            console.log(cmat.f1score);
-            
-            return cmat;
-        }
-
         function switchToMetricsTab(){
             $('#show-metrics').addClass('active');
             $('#show-data').removeClass('active');
@@ -220,15 +186,53 @@
         $('#show-metrics').on('click', ev => switchToMetricsTab());
         $('#show-data').on('click', ev => switchToDataTab());
 
-        (async () => {
-            const {labels, matrix, precision, recall, f1score} = await testModel();
-
-            $('#confusion-matrix-wrapper').append(confusionMatrix(labels, matrix));
+        $('#test').on('click', async ev => {
+            const splitFraction = parseFloat($('#train-split').val());            
             
-            $('#precision-wrapper').append(scoreTable(labels, precision));            
-            $('#recall-wrapper').append(scoreTable(labels, recall));            
-            $('#f1score-wrapper').append(scoreTable(labels, f1score));
-        })();
+            const dataLabels = ['Pclass', 'Sex', 'Survived'];
+            const data = shuffle(await loadCSV('https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv'));
+
+            const [trainingData, testingData] = split(data, splitFraction);
+
+            const trainingDataClasses = trainingData.map(row => row[dataLabels[dataLabels.length-1]]);
+            const trainingDataFeatures = trainingData.map(row => {
+                let ret = [];
+                for(let i = 0; i < dataLabels.length-1; i++)
+                    ret.push(row[dataLabels[i]]);
+                return ret;
+            });
+
+            const testingDataClasses = testingData.map(row => row[dataLabels[dataLabels.length-1]]);
+            const testingDataFeatures = testingData.map(row => {
+                let ret = [];
+                for(let i = 0; i < dataLabels.length-1; i++)
+                    ret.push(row[dataLabels[i]]);
+                return ret;
+            });
+
+            const classifier = new NBC(trainingDataFeatures, trainingDataClasses);
+
+            const predictions = testingDataFeatures.map(features => classifier.classify(features).class);
+
+            const {labels, matrix, precision, recall, f1score} = new ConfusionMatrix(testingDataClasses, predictions);
+            
+            $('#precision-wrapper').html(scoreTable(labels, precision));            
+            $('#recall-wrapper').html(scoreTable(labels, recall));            
+            $('#f1score-wrapper').html(scoreTable(labels, f1score));
+            
+            $('#confusion-matrix-wrapper').html(confusionMatrix(labels, matrix));
+
+            $('#data-wrapper').html('');
+            $('#data-wrapper').append(tableData(dataLabels, data.map(row => {
+                let ret = [];
+                for(let i = 0; i < dataLabels.length; i++)
+                    ret.push(row[dataLabels[i]]);
+                return ret;
+            })));
+            $('#data-wrapper').append(`Training with ${trainingDataClasses.length} records, testing with ${testingDataClasses.length} records`);
+        });
+
+        $(() => $('#test').trigger('click'));
     </script>
 </body>
 </html>
