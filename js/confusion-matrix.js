@@ -74,6 +74,9 @@ class ConfusionMatrix{
 
     #precision(){
         //TruePositive/(TruePositive+FalsePositive)
+        this.#labels = this.#distinct();
+        this.#computeMatrix();
+        
         let precision = [];
         for(let i = 0; i < this.#labels.length; i++){
             const precisionValue = this.#matrix[i][i] / this.#matrix.map(row => row[i]).reduce((sum, value) => sum + value);
@@ -84,6 +87,9 @@ class ConfusionMatrix{
 
     #recall(){
         //TruePositive(TruePositive+FalseNegative)
+        this.#labels = this.#distinct();
+        this.#computeMatrix();
+
         let recall = [];
         for(let i = 0; i < this.#labels.length; i++){
             const recallValue = this.matrix[i][i] / this.#matrix[i].reduce((sum , value) => sum + value);
@@ -93,6 +99,9 @@ class ConfusionMatrix{
     }
 
     #f1score(){
+        this.#labels = this.#distinct();
+        this.#computeMatrix();
+
         let score = [];
 
         const precision = this.#precision();
