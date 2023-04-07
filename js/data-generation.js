@@ -54,3 +54,11 @@ function shuffle(data){
     }
     return data;
 }
+
+function convertColumnsToFloat(data, columnLabels){
+    return data.map(row => {
+        for(let i = 0; i < columnLabels.length; i++)
+            row[columnLabels[i]] = parseFloat(row[columnLabels[i]]);
+        return row;
+    });
+}
