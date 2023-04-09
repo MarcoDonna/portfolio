@@ -15,6 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sono:wght@400;600&display=swap" rel="stylesheet">
 
+    <!--JQuery-3.6.4-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+
+    <!--P5-1.6.0-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js" integrity="sha512-3RlxD1bW34eFKPwj9gUXEWtdSMC59QqIqHnD8O/NoTwSJhgxRizdcFVQhUMFyTp5RwLTDL0Lbcqtl8b7bFAzog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <link href="css/main.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
     <link href="css/section.css" rel="stylesheet">
@@ -22,7 +28,7 @@
 
 </head>
 <body>
-    <header class="row">
+    <header class="row" id="header">
         <div class="col-1 col-lg-2 "></div>
         <div class="col-10 col-lg-8 d-flex flex-column align-items-start justify-content-center">
             <h1>Marco Donna</h1>
@@ -183,5 +189,17 @@
         </div>        
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
+
+    <script>
+        new p5(p => {
+            p.setup = () => {
+                p.createCanvas($('#header').width(), $('#header').height());
+            }
+
+            p.draw = () => {
+                p.background(0, 0, 0);
+            }
+        }, 'header');
+    </script>
 </body>
 </html>
