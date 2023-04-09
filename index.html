@@ -191,13 +191,36 @@
     </section>
 
     <script>
+
+        let animationObjects = [];
+
+        function generateNewAnimationObject(){
+            return {
+                x: Math.random() * $('#header').width(),
+                y: 0,
+                speed: 1 + Math.random() * 5
+            }
+        }
+
         new p5(p => {
             p.setup = () => {
+                p.pixelDensity(1);
                 p.createCanvas($('#header').width(), $('#header').height());
             }
 
             p.draw = () => {
                 p.background(0, 0, 0);
+
+                if(Math.random() < 0.4 && animationObjects.length < 200)
+                    animationObjects.push(generateNewAnimationObject());
+
+                animationObjects.forEach((obj, idx) => {
+                    p.circle(obj.x, obj.y, 4);
+                    obj.y += obj.speed;
+
+                    if(obj.y > $('#header').height())
+                        animationObjects.splice(idx, 1);
+                });
             }
         }, 'header');
     </script>
