@@ -194,6 +194,15 @@
 
         let animationObjects = [];
 
+        function initialAnimationObjectsPoints(){
+            for(let i = 0; i < 160; i++)
+                animationObjects.push({
+                    x: Math.random() * $('#header').width(),
+                    y: Math.random() * $('#header').height(),
+                    speed: 1 + Math.random() * 5
+                });
+        }
+
         function generateNewAnimationObject(){
             return {
                 x: Math.random() * $('#header').width(),
@@ -204,6 +213,7 @@
 
         new p5(p => {
             p.setup = () => {
+                initialAnimationObjectsPoints();
                 p.pixelDensity(1);
                 p.createCanvas($('#header').width(), $('#header').height());
             }
