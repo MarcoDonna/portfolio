@@ -21,6 +21,8 @@
     <!--P5-1.6.0-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js" integrity="sha512-3RlxD1bW34eFKPwj9gUXEWtdSMC59QqIqHnD8O/NoTwSJhgxRizdcFVQhUMFyTp5RwLTDL0Lbcqtl8b7bFAzog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="js/typewriter.js"></script>
+
     <link href="css/main.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
     <link href="css/section.css" rel="stylesheet">
@@ -32,7 +34,7 @@
         <div class="col-1 col-lg-2 "></div>
         <div class="col-10 col-lg-8 d-flex flex-column align-items-start justify-content-center">
             <h1>Marco Donna</h1>
-            <h2>"Inspiring quote or smth"</h2>
+            <h2 id="header-subtitle">"Inspiring quote or smth"</h2>
         </div>
         <div class="col-1 col-lg-2"></div>
     </header>
@@ -233,6 +235,8 @@
                 });
             }
         }, 'header');
+
+        $(() => typewriterEffect('#header-subtitle', true))
     </script>
 </body>
 </html>
