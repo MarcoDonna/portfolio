@@ -1,14 +1,18 @@
 function addCheckpoint(elementSelector, offset, callback){
-    $element = $(elementSelector);
+    $(elementSelector).data('checkpoint-triggered', false);
+
     const eventListener = $(document).on('scroll', ev => {
+        let $element = $(elementSelector);
         const scrollPosition = $(window).scrollTop();
 
-        if(offset && typeof offset == 'string')
+        if($element.data('checkpoint-triggered') == false){
+            if(offset && typeof offset == 'string')
             offset = Math.round(parseFloat(offset.substring(0, offset.length - 1)) / 100 * window.screen.height);
 
-        if(scrollPosition > $element.offset().top - offset){
-            eventListener.off('scroll');
-            callback($element);
+            if(scrollPosition > $element.offset().top - offset){
+                $(elementSelector).data('checkpoint-triggered', true);
+                callback($element);
+            }
         }
     });
 }
