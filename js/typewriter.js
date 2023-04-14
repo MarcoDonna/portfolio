@@ -1,6 +1,10 @@
-async function typewriterEffect(elementSelector){
+async function typewriterEffect(elementSelector, delay){
     const $element = $(elementSelector);
     const string = $element.html();
+    $element.html('');
+
+    if(delay)
+        await sleep(delay);
 
     for(let i = 0; i < string.length; i++){
         $element.html(`${string.substring(0, i+1)}|`);
