@@ -21,6 +21,7 @@
     <!--P5-1.6.0-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js" integrity="sha512-3RlxD1bW34eFKPwj9gUXEWtdSMC59QqIqHnD8O/NoTwSJhgxRizdcFVQhUMFyTp5RwLTDL0Lbcqtl8b7bFAzog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="js/checkpoint.js"></script>
     <script src="js/typewriter.js"></script>
 
     <link href="css/main.css" rel="stylesheet">
@@ -42,7 +43,7 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>About me</h1>
+            <h1 id="about-me-title">About me</h1>
             <article>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
@@ -58,7 +59,7 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Projects</h1>
+            <h1 id="projects-title">Projects</h1>
             <article>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
@@ -91,7 +92,7 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Skills</h1>
+            <h1 id="skills-title">Skills</h1>
             <article>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
@@ -135,7 +136,7 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Experiences</h1>
+            <h1 id="experiences-title">Experiences</h1>
             <article>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
@@ -163,7 +164,7 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Education and certifications</h1>
+            <h1 id="certs-title">Education and certifications</h1>
             <article>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
@@ -179,7 +180,7 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Contacts</h1>
+            <h1 id="contacts-title">Contacts</h1>
             <article>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
@@ -236,7 +237,15 @@
             }
         }, 'header');
 
-        $(() => typewriterEffect('#header-subtitle', true))
+        $(() => {
+            typewriterEffect('#header-subtitle')
+            addCheckpoint('#about-me-title', '100%', () => typewriterEffect('#about-me-title', 160, 100));
+            addCheckpoint('#projects-title', '100%', () => typewriterEffect('#projects-title', 160, 100));
+            addCheckpoint('#skills-title', '100%', () => typewriterEffect('#skills-title', 160, 100));
+            addCheckpoint('#experiences-title', '100%', () => typewriterEffect('#experiences-title', 160, 100));
+            addCheckpoint('#certs-title', '100%', () => typewriterEffect('#certs-title', 160, 100));
+            addCheckpoint('#contacts-title', '100%', () => typewriterEffect('#contacts-title', 160, 100));
+        });
     </script>
 </body>
 </html>
