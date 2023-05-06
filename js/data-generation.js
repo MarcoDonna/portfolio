@@ -54,3 +54,10 @@ function shuffle(data){
     }
     return data;
 }
+
+function parseFloatColumn(data, column){
+    for(let i = 0; i < data.length; i++){
+        data[i][column] = parseFloat(data[i][column]);
+    }
+    return data;
+}
