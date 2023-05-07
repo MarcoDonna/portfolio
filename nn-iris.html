@@ -101,7 +101,9 @@
                 </details>
               </div>    
               <div class="d-none" id="data-wrapper"></div>
-              <div class="d-none" id="model-wrapper"></div>
+              <div class="d-none" id="model-wrapper">
+                <canvas id="model-canvas"></canvas>
+              </div>
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
@@ -207,6 +209,67 @@
             return $table;
         }
 
+        function drawModel(model, wrapperId){
+            const wrapper = $(wrapperId)
+            const canvas = wrapper.children('canvas')[0];
+            const ctx = canvas.getContext('2d');
+
+            const CANVAS_WIDTH = wrapper.width();
+            
+            const neuronSegmentWidth = CANVAS_WIDTH / model.depth;
+            const segmentWidth = neuronSegmentWidth * 0.65;
+            const neuronsRadius = neuronSegmentWidth * 0.35 / 2;
+            
+            //Max layer size * 2.4 * radius
+            let maxLayerSize = model.layers[0].neuronsNumber;
+            for(let i = 1; i < model.depth; i++)
+                if(model.layers[i].neuronsNumber > maxLayerSize)
+                    maxLayerSize = model.layers[i].neuronsNumber;
+            const CANVAS_HEIGHT = (maxLayerSize * 2.4 * neuronsRadius);
+
+
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
+            
+            //Clear canvas
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, 1 * CANVAS_WIDTH, 1 * CANVAS_HEIGHT);
+
+
+            //Draw input neurons
+            const inputLayer = model.inputLayer;
+            ctx.strokeStyle = 'black';
+            for(let neuronIndex = 0; neuronIndex < inputLayer.neuronsNumber; neuronIndex++){
+                ctx.beginPath();
+                ctx.arc(segmentWidth + neuronsRadius, neuronsRadius +  neuronIndex * (2.4 * neuronsRadius), neuronsRadius, 0, 2 * Math.PI);
+                ctx.stroke();
+            }
+
+            //Draw hidden and output layers            
+            for(let layerIndex = 1; layerIndex < model.depth; layerIndex++){
+                const layer = model.layers[layerIndex];
+                for(let neuronIndex = 0; neuronIndex < layer.neuronsNumber; neuronIndex++){
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.arc(segmentWidth + neuronsRadius + layerIndex * (neuronsRadius + segmentWidth), neuronsRadius +  neuronIndex * (2.4 * neuronsRadius), neuronsRadius, 0, 2 * Math.PI);
+                    ctx.stroke();
+
+                    //Draw weightsconst weights = layer.weights[neuronIndex];
+                    const weights = layer.weights[neuronIndex];
+                    for(let weightIndex = 0; weightIndex < weights.length; weightIndex++){
+                        const weight = weights[weightIndex];
+                        ctx.strokeStyle = weight > 0 ? 'green' : 'red';
+                        ctx.lineWidth = 1 + weight;
+                        ctx.beginPath();
+                        ctx.moveTo(segmentWidth + layerIndex * (neuronsRadius + segmentWidth), neuronsRadius +  neuronIndex * (2.4 * neuronsRadius))
+                        ctx.lineTo(segmentWidth + (layerIndex-1) * (neuronsRadius + segmentWidth) + 2 * neuronsRadius, neuronsRadius +  weightIndex * (2.4 * neuronsRadius))
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
         function switchToMetricsTab(){
             $('#show-metrics').addClass('active');
             $('#show-data').removeClass('active');
@@ -237,7 +300,6 @@
         $('#show-metrics').on('click', ev => switchToMetricsTab());
         $('#show-data').on('click', ev => switchToDataTab());
         $('#show-model').on('click', ev => switchToModelTab());
-
 
         $('#test').on('click', async ev => {
             const dataLabels = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width','species'];
@@ -325,6 +387,10 @@
                 return ret;
             })));
             $('#data-wrapper').append(`Training with ${trainingDataClasses.length} records, testing with ${testingDataClasses.length} records`);
+
+            switchToModelTab();
+            drawModel(network, '#model-wrapper');
+            switchToMetricsTab();
         });
 
         $(() => $('#test').trigger('click'));
