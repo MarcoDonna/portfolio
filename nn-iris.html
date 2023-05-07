@@ -17,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js" integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="js/data-generation.js"></script>
+    <script src="js/confusion-matrix.js"></script>
 
     <script src="js/neural-network/utils.js"></script>
     <script src="js/neural-network/activation.js"></script>
@@ -124,6 +125,66 @@
 
     <script>
 
+        function confusionMatrix(labels, matrix){
+            let $table = $('<table/>').addClass('table table-bordered');
+
+            let $head = $('<tr/>').append($('<th/>').html('Actual \\ Predicted'));
+            for(let i = 0; i < labels.length; i++)
+                $head.append($('<th/>').html(labels[i]));
+            $table.append($head);
+
+            for(let i = 0; i < labels.length; i++){
+                $row = $('<tr/>').append($('<th/>').html(labels[i]));
+                for(let j = 0; j < labels.length; j++)
+                    $row.append($('<td/>').html(matrix[i][j]));
+                $table.append($row);
+            }
+
+            return $table;
+        }
+
+        function scoreTable(labels, values){
+            let $table = $('<table/>').addClass('table table-bordered');
+
+            let $head = $('<tr/>');
+            for(let i = 0; i < labels.length; i++)
+                $head.append($('<th/>').html(labels[i]));
+            $table.append($('<thead>').addClass('table-light').append($head));
+
+            let $row = $('<tr/>');
+            for(let i = 0; i < labels.length; i++)
+                $row.append($('<td/>').html(values[i].toFixed(2)));
+            $table.append($('<tbody>').append($row));
+
+            return $table;
+        }
+
+        function tableData(labels, data){
+            let $table = $('<table/>').addClass('table table-striped');
+
+            let $head = $('<tr/>')
+            for(let i = 0; i < labels.length; i++)                
+                $head.append($('<th/>').html(labels[i]));
+            $table.append($('<thead/>').addClass('table-dark').append($head));
+
+            let $body = $('<tbody/>');
+            for(let i = 0; i < 5; i++){                
+                let $row = $('<tr/>');
+                for(let j = 0; j < labels.length; j++)                
+                    $row.append($('<td/>').html(data[i][j]));
+                $body.append($row);
+            }
+            
+            let $row = $('<tr/>');
+            for(let j = 0; j < labels.length; j++)                
+                $row.append($('<td/>').html('...'));
+            $body.append($row);
+
+            $table.append($body);
+
+            return $table;
+        }
+
         $('#test').on('click', async ev => {
             const dataLabels = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width','species'];
             let data = shuffle(await loadCSV('https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv'));
@@ -142,6 +203,7 @@
             const [trainingData, testingData] = split(data, splitFraction);
 
             const trainingDataClasses = trainingData.map(row => {
+                //Training species one hot vector
                 const species = row.species;
                 if(species == 'virginica')
                     return [1, 0, 0];
@@ -149,6 +211,8 @@
                     return [0, 1, 0];
                 return [0, 0, 1];
             });
+
+            const testingDataClasses = testingData.map(row => row.species);
 
             const trainingDataFeatures = trainingData.map(row => {
                 let ret = [];
@@ -157,17 +221,8 @@
                         ret.push(row[dataLabels[i]]);
                 return ret;
             });
-
-            const testingDataFeatures = testingData.map(row => {
-                const species = row.species;
-                if(species == 'virginica')
-                    return [1, 0, 0];
-                if(species == 'versicolor')
-                    return [0, 1, 0];
-                return [0, 0, 1];
-            });     
             
-            const testingDataClasses = testingData.map(row => {
+            const testingDataFeatures = testingData.map(row => {
                 let ret = [];
                 for(let i = 0; i < dataLabels.length; i++)
                     if(dataLabels[i] != 'species')
@@ -175,8 +230,38 @@
                 return ret;
             });
 
-            console.log(trainingDataClasses);
-            console.log(trainingDataFeatures);
+            //Network training
+            const epochs = parseInt($('#train-epochs').val());
+            const learningrate = parseFloat($('#train-learningrate').val());
+            const batchsize = parseInt($('#train-batchsize').val());
+
+            const layers = [
+                new InputLayer(4),
+                new DenseLayer(4, 6, sigmoid, sigmoidPrime),
+                new DropoutLayer(6, 6, sigmoid, sigmoidPrime),
+                new OutputLayer(6, 3, sigmoid, sigmoidPrime)
+            ];
+
+            const network = new NeuralNetwork(layers);
+            network.train(trainingDataFeatures, trainingDataClasses, epochs, learningrate, batchsize);
+
+            const predictions = testingDataFeatures.map(row => {
+                const p = network.predict(row);
+                if(p[0] > 0.5)
+                    return 'virginica';
+                if(p[1] > 0.5)
+                    return 'versicolor';
+                return 'setosa';
+            });
+
+            const {labels, matrix, precision, recall, f1score} = new ConfusionMatrix(testingDataClasses, predictions);
+            
+            $('#precision-wrapper').html(scoreTable(labels, precision));            
+            $('#recall-wrapper').html(scoreTable(labels, recall));            
+            $('#f1score-wrapper').html(scoreTable(labels, f1score));
+            
+            $('#confusion-matrix-wrapper').html(confusionMatrix(labels, matrix));
+
         });
 
         $(() => $('#test').trigger('click'));
