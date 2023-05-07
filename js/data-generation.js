@@ -61,3 +61,29 @@ function parseFloatColumn(data, column){
     }
     return data;
 }
+
+function findMax(data, column){
+    let max = data[0][column];
+    for(let i = 1; i < data.length; i++)
+        if(data[i][column] > max)
+            max = data[i][column];
+    return max;
+}
+
+function findMin(data, column){
+    let min = data[0][column];
+    for(let i = 1; i < data.length; i++)
+        if(data[i][column] < min)
+            min = data[i][column];
+    return min;
+}
+
+function normalizeColumn(data, column, min, max){
+    if(!min)
+        min = findMin(data, column);
+    if(!max)
+        max = findMax(data, column);
+
+    for(let i = 0; i < data.length; i++)
+        data[i][column] = (data[i][column] - min) / (max - min);
+}
