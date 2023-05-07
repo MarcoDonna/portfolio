@@ -255,15 +255,25 @@
                     ctx.arc(segmentWidth + neuronsRadius + layerIndex * (neuronsRadius + segmentWidth), neuronsRadius +  neuronIndex * (2.4 * neuronsRadius), neuronsRadius, 0, 2 * Math.PI);
                     ctx.stroke();
 
-                    //Draw weightsconst weights = layer.weights[neuronIndex];
+                    //Draw bias
+                    const bias = layer.biases[neuronIndex];
+                    ctx.strokeStyle = bias > 0 ? 'green' : 'red';
+                    ctx.lineWidth = 1 + bias;
+                    ctx.beginPath();
+                    ctx.moveTo(segmentWidth + layerIndex * (neuronsRadius + segmentWidth), neuronsRadius +  neuronIndex * (2.4 * neuronsRadius));
+                    ctx.lineTo(segmentWidth + layerIndex * (neuronsRadius + segmentWidth), neuronIndex * (2.4 * neuronsRadius));
+                    ctx.stroke();
+
+
+                    //Draw weight
                     const weights = layer.weights[neuronIndex];
                     for(let weightIndex = 0; weightIndex < weights.length; weightIndex++){
                         const weight = weights[weightIndex];
                         ctx.strokeStyle = weight > 0 ? 'green' : 'red';
                         ctx.lineWidth = 1 + weight;
                         ctx.beginPath();
-                        ctx.moveTo(segmentWidth + layerIndex * (neuronsRadius + segmentWidth), neuronsRadius +  neuronIndex * (2.4 * neuronsRadius))
-                        ctx.lineTo(segmentWidth + (layerIndex-1) * (neuronsRadius + segmentWidth) + 2 * neuronsRadius, neuronsRadius +  weightIndex * (2.4 * neuronsRadius))
+                        ctx.moveTo(segmentWidth + layerIndex * (neuronsRadius + segmentWidth), neuronsRadius +  neuronIndex * (2.4 * neuronsRadius));
+                        ctx.lineTo(segmentWidth + (layerIndex-1) * (neuronsRadius + segmentWidth) + 2 * neuronsRadius, neuronsRadius +  weightIndex * (2.4 * neuronsRadius));
                         ctx.stroke();
                     }
                 }
