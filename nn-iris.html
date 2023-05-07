@@ -69,7 +69,7 @@
                   <a class="nav-link" id="show-data">Data</a>
                 </li>
                 <li>
-                    <a class="nav-link" id="show-network"></a>
+                    <a class="nav-link" id="show-model">Model</a>
                 </li>
               </ul>
               <div id="metrics-wrapper">              
@@ -85,7 +85,7 @@
                 </details>
               </div>    
               <div class="d-none" id="data-wrapper"></div>
-              <div class="d-none" id="network-visualiser"></div>
+              <div class="d-none" id="model-wrapper"></div>
         </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
@@ -97,6 +97,12 @@
             <div class="input-group mb-3">
                 <span class="input-group-text">Split training/testing</span>
                 <input type="number" class="form-control" id="train-split" value="0.7" min="0" max="1">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="train-normalizedata" checked>
+                <label class="form-check-label" for="train-normalizedata">
+                    Normalize data
+                </label>
             </div>
         </div>
     </section>
@@ -118,7 +124,7 @@
                 <input type="number" class="form-control" id="train-batchsize" value="10" min="0" max="150" step="5">
             </div>
             <div class="input-group mb-3">
-                <button type="button" class="btn btn-primary" id="test">Test model</button>
+                <button type="button" class="btn btn-primary" id="test">Train model</button>
             </div>
         </div>
     </section>
@@ -185,17 +191,51 @@
             return $table;
         }
 
+        function switchToMetricsTab(){
+            $('#show-metrics').addClass('active');
+            $('#show-data').removeClass('active');
+            $('#show-model').removeClass('active');
+            $('#metrics-wrapper').removeClass('d-none');
+            $('#data-wrapper').addClass('d-none');
+            $('#model-wrapper').addClass('d-none');
+        }
+
+        function switchToDataTab(){
+            $('#show-metrics').removeClass('active');
+            $('#show-data').addClass('active');            
+            $('#show-model').removeClass('active');
+            $('#metrics-wrapper').addClass('d-none');
+            $('#data-wrapper').removeClass('d-none');
+            $('#model-wrapper').addClass('d-none');
+        }
+
+        function switchToModelTab(){
+            $('#show-metrics').removeClass('active');
+            $('#show-data').removeClass('active');            
+            $('#show-model').addClass('active');
+            $('#metrics-wrapper').addClass('d-none');
+            $('#data-wrapper').addClass('d-none');
+            $('#model-wrapper').removeClass('d-none');
+        }
+
+        $('#show-metrics').on('click', ev => switchToMetricsTab());
+        $('#show-data').on('click', ev => switchToDataTab());
+        $('#show-model').on('click', ev => switchToModelTab());
+
+
         $('#test').on('click', async ev => {
             const dataLabels = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width','species'];
             let data = shuffle(await loadCSV('https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv'));
             
+            const normalize = $('#train-normalizedata').is(':checked');
             for(let i = 0; i < dataLabels.length; i++)
                 if(dataLabels[i] != 'species'){
                     //Convert column to float
                     parseFloatColumn(data, dataLabels[i]);
 
                     //Normalize column
-                    normalizeColumn(data, dataLabels[i], /*max, min*/);
+                    if(normalize)
+                        normalizeColumn(data, dataLabels[i], /*max, min*/);
                 }
 
 
@@ -238,7 +278,6 @@
             const layers = [
                 new InputLayer(4),
                 new DenseLayer(4, 6, sigmoid, sigmoidPrime),
-                new DropoutLayer(6, 6, sigmoid, sigmoidPrime),
                 new OutputLayer(6, 3, sigmoid, sigmoidPrime)
             ];
 
@@ -262,6 +301,14 @@
             
             $('#confusion-matrix-wrapper').html(confusionMatrix(labels, matrix));
 
+            $('#data-wrapper').html('');
+            $('#data-wrapper').append(tableData(dataLabels, data.map(row => {
+                let ret = [];
+                for(let i = 0; i < dataLabels.length; i++)
+                    ret.push(row[dataLabels[i]]);
+                return ret;
+            })));
+            $('#data-wrapper').append(`Training with ${trainingDataClasses.length} records, testing with ${testingDataClasses.length} records`);
         });
 
         $(() => $('#test').trigger('click'));
