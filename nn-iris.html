@@ -194,8 +194,26 @@
     </section>
 
     <script>
-        const networkBuilderLayers = [];
+        const networkBuilderLayers = [
+            {
+                layerType: "input-layer",
+                layerNeurons: 4,
+                layerActivationfunction: "sigmoid"
+            },
+            {
+                layerType: "dense-layer",
+                layerNeurons: 4,
+                layerActivationfunction: "sigmoid"
+            },
+            {
+                layerType: "output-layer",
+                layerNeurons: 3,
+                layerActivationfunction: "sigmoid"
+            }
+        ];
 
+        renderLayersList();
+        
         $('#add-layer').on('click', ev => {
             const layerType = $('#layer-type').val();
             const layerNeurons = parseInt($('#layer-neurons').val());
@@ -213,8 +231,20 @@
         function renderLayersList(){
             $(`#layers-list`).html('');
 
-            for(let i = 0; i < networkBuilderLayers.length; i++)
-                $(`#layers-list`).append($('<li/>').addClass('list-group-item').html(`${networkBuilderLayers[i].layerType}, Neurons: ${networkBuilderLayers[i].layerNeurons}, ${networkBuilderLayers[i].layerActivationfunction}`))
+            for(let i = 0; i < networkBuilderLayers.length; i++){
+                const rowHTMl = `${networkBuilderLayers[i].layerType}, Neurons: ${networkBuilderLayers[i].layerNeurons}, ${networkBuilderLayers[i].layerActivationfunction}`
+                
+                const removeBtn = $('<button/>').addClass('btn btn-sm btn-danger float-end font-weight-bold').html('Remove').on('click', ev => removeLayer(i));
+                
+                $(`#layers-list`).append($('<li/>').addClass('list-group-item').html(rowHTMl).append(removeBtn));
+
+            }
+                
+        }
+
+        function removeLayer(index){
+            networkBuilderLayers.splice(index, 1);
+            renderLayersList();
         }
 
         function networkModelBuilder(){
