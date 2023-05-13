@@ -151,7 +151,7 @@
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1>Network builder</h1>
-            <ul class="list-group">
+            <ul class="list-group" id="layers-list">
                 <li class="list-group-item">InputLayer, neurons: 2</li>
                 <li class="list-group-item">DenseLayer, neurons: 4, sigmoid</li>
                 <li class="list-group-item">DropoutLayer, neurons: 4, sigmoid, dropoutRate: {0.2}</li>
@@ -185,6 +185,76 @@
     </section>
 
     <script>
+        const networkBuilderLayers = [];
+
+        $('#add-layer').on('click', ev => {
+            const layerType = $('#layer-type').val();
+            const layerNeurons = parseInt($('#layer-neurons').val());
+            const layerActivationfunction = $('#layer-activationfunction').val();
+
+            networkBuilderLayers.push({
+                layerType, 
+                layerNeurons,
+                layerActivationfunction
+            });
+
+            renderLayersList();
+        });
+
+        function renderLayersList(){
+            $(`#layers-list`).html('');
+
+            for(let i = 0; i < networkBuilderLayers.length; i++)
+                $(`#layers-list`).append($('<li/>').addClass('list-group-item').html(`${networkBuilderLayers[i].layerType}, Neurons: ${networkBuilderLayers[i].layerNeurons}, ${networkBuilderLayers[i].layerActivationfunction}`))
+        }
+
+        function networkModelBuilder(){
+            const layers = [];
+
+            for(let i = 0; i < networkBuilderLayers.length; i++){
+                const layerData = networkBuilderLayers[i];
+
+                const type = layerData.layerType;
+                const neuronNumber = layerData.layerNeurons;
+                const [activationFunction, activationFunctionPrime] = activationFunctionSelector(layerData.layerActivationfunction);
+
+                switch(type){
+                    case 'input-layer':
+                        layers.push(new InputLayer(neuronNumber));
+                        break;
+                    case 'dense-layer':
+                        layers.push(new DenseLayer(networkBuilderLayers[i-1].layerNeurons, neuronNumber, activationFunction, activationFunctionPrime));
+                        break;
+                    case 'dropout-layer':
+                        layers.push(new DropoutLayer(networkBuilderLayers[i-1].layerNeurons, neuronNumber, activationFunction, activationFunctionPrime));
+                        break;
+                    case 'output-layer':
+                        layers.push(new OutputLayer(networkBuilderLayers[i-1].layerNeurons, neuronNumber, activationFunction, activationFunctionPrime));
+                        break;
+                }
+            }
+            return layers;
+        }
+
+        function activationFunctionSelector(name){
+            switch(name){
+                case 'sigmoid':
+                    return [sigmoid, sigmoidPrime];
+                    break;
+                case 'tanh':
+                    return [tanh, tanhPrime];
+                    break;
+                case 'relu':
+                    return [relu, reluPrime];
+                    break;
+                case 'leakyrelu':
+                    return [leakyrelu, leakyreluPrime];
+                    break;
+                case 'elu':   
+                    return [elu, eluPrime];
+                    break;
+            }
+        }
 
         function confusionMatrix(labels, matrix){
             let $table = $('<table/>').addClass('table table-bordered');
@@ -244,10 +314,6 @@
             $table.append($body);
 
             return $table;
-        }
-
-        function renderLayersList(layers, listId){
-            $(`#${wrapperId}`).html('');
         }
 
         function drawModel(model, wrapperId){
@@ -403,11 +469,7 @@
             const learningrate = parseFloat($('#train-learningrate').val());
             const batchsize = parseInt($('#train-batchsize').val());
 
-            const layers = [
-                new InputLayer(4),
-                new DenseLayer(4, 6, sigmoid, sigmoidPrime),
-                new OutputLayer(6, 3, sigmoid, sigmoidPrime)
-            ];
+            const layers = networkModelBuilder();
 
             const network = new NeuralNetwork(layers);
             network.train(trainingDataFeatures, trainingDataClasses, epochs, learningrate, batchsize);
@@ -443,7 +505,7 @@
             switchToMetricsTab();
         });
 
-        //$(() => $('#test').trigger('click'));
+        $(() => $('#test').trigger('click'));
         
     </script>
 </body>
