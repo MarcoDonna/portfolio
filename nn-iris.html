@@ -147,6 +147,43 @@
         </div>
     </section>
 
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Network builder</h1>
+            <ul class="list-group">
+                <li class="list-group-item">InputLayer, neurons: 2</li>
+                <li class="list-group-item">DenseLayer, neurons: 4, sigmoid</li>
+                <li class="list-group-item">DropoutLayer, neurons: 4, sigmoid, dropoutRate: {0.2}</li>
+                <li class="list-group-item">OutputLayer, neurons: 1, sigmoid</li>
+            </ul>
+            <div class="input-group mt-2 mb-3">
+
+                <label class="input-group-text" for="layer-type">Layer type</label>
+                <select class="form-select" id="layer-type">
+                    <option value="input-layer" selected>Input Layer</option>
+                    <option value="dense-layer">Dense Layer</option>
+                    <option value="dropout-layer">Dropout Layer</option>
+                    <option value="output-layer">Output Layer</option>
+                </select>
+
+                <label class="input-group-text" for="layer-neurons">Neurons</label>
+                <input type="number" class="form-control" id="layer-neurons" value="2" min="1" max="10" step="1">
+
+                <label class="input-group-text" for="layer-type">Activation function</label>
+                <select class="form-select" id="layer-activationfunction">
+                    <option value="sigmoid" selected>Sigmoid</option>
+                    <option value="tanh">Tanh</option>
+                    <option value="relu">ReLU</option>
+                    <option value="leakyrelu">Leaky ReLU</option>
+                    <option value="elu">ELU</option>
+                </select>
+
+                <button class="btn btn-outline-secondary" id="add-layer">Add Layer</button>
+            </div>
+        </div>
+    </section>
+
     <script>
 
         function confusionMatrix(labels, matrix){
@@ -207,6 +244,10 @@
             $table.append($body);
 
             return $table;
+        }
+
+        function renderLayersList(layers, listId){
+            $(`#${wrapperId}`).html('');
         }
 
         function drawModel(model, wrapperId){
@@ -402,7 +443,7 @@
             switchToMetricsTab();
         });
 
-        $(() => $('#test').trigger('click'));
+        //$(() => $('#test').trigger('click'));
         
     </script>
 </body>
