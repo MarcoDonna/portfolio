@@ -183,6 +183,7 @@
                 <select class="form-select" id="layer-activationfunction">
                     <option value="sigmoid" selected>Sigmoid</option>
                     <option value="tanh">Tanh</option>
+                    <option value="linear">Linear</option>
                     <option value="relu">ReLU</option>
                     <option value="leakyrelu">Leaky ReLU</option>
                     <option value="elu">ELU</option>
@@ -283,11 +284,14 @@
                 case 'tanh':
                     return [tanh, tanhPrime];
                     break;
+                case 'linear':
+                    return [linear, linearPrime];
+                    break;
                 case 'relu':
                     return [relu, reluPrime];
                     break;
                 case 'leakyrelu':
-                    return [leakyrelu, leakyreluPrime];
+                    return [leakyRelu, leakyReluPrime];
                     break;
                 case 'elu':   
                     return [elu, eluPrime];
