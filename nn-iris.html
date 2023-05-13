@@ -128,28 +128,6 @@
     <section class="row">
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
-            <h1>Training configuration</h1>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Epochs</span>
-                <input type="number" class="form-control" id="train-epochs" value="5000" min="0" max="100000" step="100">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Learning rate</span>
-                <input type="number" class="form-control" id="train-learningrate" value="0.1" min="0" max="0.8" step="0.02">
-            </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text">Batch size</span>
-                <input type="number" class="form-control" id="train-batchsize" value="10" min="0" max="150" step="5">
-            </div>
-            <div class="input-group mb-3">
-                <button type="button" class="btn btn-primary" id="test">Train model</button>
-            </div>
-        </div>
-    </section>
-
-    <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
-        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1>Network builder</h1>
 
             <div class="alert alert-danger" role="alert">
@@ -166,7 +144,7 @@
                 <li class="list-group-item">DropoutLayer, neurons: 4, sigmoid, dropoutRate: {0.2}</li>
                 <li class="list-group-item">OutputLayer, neurons: 1, sigmoid</li>
             </ul>
-            <div class="input-group mt-2 mb-3">
+            <div class="input-group mt-3 mb-3">
 
                 <label class="input-group-text" for="layer-type">Layer type</label>
                 <select class="form-select" id="layer-type">
@@ -189,7 +167,29 @@
                     <option value="elu">ELU</option>
                 </select>
 
-                <button class="btn btn-outline-secondary" id="add-layer">Add Layer</button>
+                <button class="btn btn-outline-primary" id="add-layer">Add Layer</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="row">
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
+        <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
+            <h1>Training configuration</h1>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Epochs</span>
+                <input type="number" class="form-control" id="train-epochs" value="5000" min="0" max="100000" step="100">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Learning rate</span>
+                <input type="number" class="form-control" id="train-learningrate" value="0.1" min="0" max="0.8" step="0.02">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Batch size</span>
+                <input type="number" class="form-control" id="train-batchsize" value="10" min="0" max="150" step="5">
+            </div>
+            <div class="input-group mb-3">
+                <button type="button" class="btn btn-primary" id="test">Train model</button>
             </div>
         </div>
     </section>
