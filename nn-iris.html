@@ -544,8 +544,7 @@
             $('#data-wrapper').append(`Training with ${trainingDataClasses.length} records, testing with ${testingDataClasses.length} records`);
 
             switchToModelTab();
-            drawModel(network, '#model-wrapper');
-            switchToMetricsTab();
+            drawModel(network, '#model-wrapper');            
         });
 
         $(() => $('#test').trigger('click'));
