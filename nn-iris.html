@@ -16,6 +16,8 @@
     <!--JQuery-csv-1.0.21-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js" integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="js/tabs.js"></script>
+
     <script src="js/data-generation.js"></script>
     <script src="js/confusion-matrix.js"></script>
 
@@ -195,6 +197,11 @@
     </section>
 
     <script>
+
+        //const tabsHandler = new Tabs([['metrics-wrapper', 'show-metrics'], ['data-wrapper', 'show-data'], ['model-wrapper', 'show-model']]);
+
+        const tabsHandler = new Tabs(['metrics', 'data', 'model'], true);
+
         const networkBuilderLayers = [
             {
                 layerType: "input-layer",
@@ -429,37 +436,6 @@
             }
         }
 
-        function switchToMetricsTab(){
-            $('#show-metrics').addClass('active');
-            $('#show-data').removeClass('active');
-            $('#show-model').removeClass('active');
-            $('#metrics-wrapper').removeClass('d-none');
-            $('#data-wrapper').addClass('d-none');
-            $('#model-wrapper').addClass('d-none');
-        }
-
-        function switchToDataTab(){
-            $('#show-metrics').removeClass('active');
-            $('#show-data').addClass('active');            
-            $('#show-model').removeClass('active');
-            $('#metrics-wrapper').addClass('d-none');
-            $('#data-wrapper').removeClass('d-none');
-            $('#model-wrapper').addClass('d-none');
-        }
-
-        function switchToModelTab(){
-            $('#show-metrics').removeClass('active');
-            $('#show-data').removeClass('active');            
-            $('#show-model').addClass('active');
-            $('#metrics-wrapper').addClass('d-none');
-            $('#data-wrapper').addClass('d-none');
-            $('#model-wrapper').removeClass('d-none');
-        }
-
-        $('#show-metrics').on('click', ev => switchToMetricsTab());
-        $('#show-data').on('click', ev => switchToDataTab());
-        $('#show-model').on('click', ev => switchToModelTab());
-
         $('#test').on('click', async ev => {
             const dataLabels = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width','species'];
             let data = shuffle(await loadCSV('https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv'));
@@ -543,7 +519,7 @@
             })));
             $('#data-wrapper').append(`Training with ${trainingDataClasses.length} records, testing with ${testingDataClasses.length} records`);
 
-            switchToModelTab();
+            tabsHandler.show('model');
             drawModel(network, '#model-wrapper');            
         });
 
