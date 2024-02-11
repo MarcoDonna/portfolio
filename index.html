@@ -29,6 +29,13 @@
     <link href="css/section.css" rel="stylesheet">
     <link href="css/cards-list.css" rel="stylesheet">
 
+    <style>
+        .wip{
+            text-decoration: line-through;
+            color: gray
+        }
+    </style>
+
 </head>
 <body>
     <header class="row" id="header">
@@ -41,156 +48,176 @@
     </header>
 
     <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1 id="about-me-title">About me</h1>
             <article>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
+                    Junior developer, passionate about different coding languages, technology, artificial intelligence and gaming.
                 </p>
                 <p>
-                    Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
+                    I enjoy self-learning by experimenting and working on new projects: tenacious about bringing the results home.
+                </p>
+                <p>
+                    Introverted but ready to grow into a challenging work experience.
                 </p>
             </article>
-        </div>        
+        </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
 
     <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1 id="projects-title">Projects</h1>
-            <article>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
-                </p>
-                <p>
-                    Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
-                </p>
-            </article>
+            <details open>
+                <summary>JS Library to build, train and run neural networks in the browser</summary>
+                <ul>
+                    <li><a href="https://marcodonna.github.io/neural-network/index.html">Solving IRIS Dataset</a></li>
+                    <li><a href="https://marcodonna.github.io/neural-network/selfdriving.html">Self driving car</a> (Supervised Learning)</li>
+                    <li><a href="https://marcodonna.github.io/neural-network/deepq.html">Deep-Q Learning Agent</a> (Reinforcment Learning)</li>
+                </ul>
+            </details>
             <details open>
                 <summary>AI and ML</summary>
                 <ul>
                     <li><a href="linear-regression.html">Linear regression</a></li>
                     <li><a href="clustering.html">Clustering</a></li>
-                    <li><a href="">Decision tree</a></li>
+                    <li><a class="wip" href="">Decision tree</a></li>
+                    <li><a href="https://marcodonna.github.io/neural-network/qtable.html">QTable</a></li>
                     <li><a href="naive-bayes-classifier.html">Naive Bayes classifier</a></li>
-                    <li><a href="#">Q-Learning</a></li>
-                    <li><a href="neural-network.html">Neural network</a></li>
                 </ul>
             </details>
-            <details open>
+            <!--<details open>
                 <summary>Algorithms</summary>
                 <ul>
-                    <li><a href="#">Inverse kinematics</a></li>
-                    <li><a href="#">Ramer-Douglas-Peucker</a></li>
+                    <li><a class="wip" href="#">Inverse kinematics</a></li>
+                    <li><a class="wip" href="#">Ramer-Douglas-Peucker</a></li>
                 </ul>
-            </details>
-        </div>        
+            </details>-->
+        </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
 
     <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1 id="skills-title">Skills</h1>
             <article>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
+                    I have independently studied different coding languages, having the opportunity to deepen them through
+                    my experiences. I enjoy experimenting with new technologies even outside my work experience.
                 </p>
             </article>
-            <details>
-                <summary>Type of skill</summary>
+            <details open>
+                <summary>Coding</summary>
                 <table>
                     <tr>
-                        <td>🔥</td><td>Name</td>
+                        <!--<td>🔥</td><td>Name</td>-->
+                        <td>Javascript, HTML and CSS</td>
                     </tr>
                     <tr>
-                        <td>🔥</td><td>Name</td>
+                        <td>NodeJS with express</td>
                     </tr>
                     <tr>
-                        <td>🔥</td><td>Name</td>
+                        <td>Ruby and Ruby on Rails</td>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
                     </tr>
                 </table>
             </details>
-            <details>
-                <summary>Type of skill</summary>
+            <details open>
+                <summary>Databases</summary>
                 <table>
                     <tr>
-                        <td>🔥</td><td>Name</td>
+                        <td>MongoDB</td>
                     </tr>
                     <tr>
-                        <td>🔥</td><td>Name</td>
+                        <td>Caching with Redis</td>
                     </tr>
                     <tr>
-                        <td>🔥</td><td>Name</td>
+                        <td>MySQL</td>
                     </tr>
                 </table>
             </details>
-            <p>
-                Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
-            </p>
-        </div>        
+            <details open>
+                <summary>Cloud</summary>
+                <table>
+                    <tr>
+                        <td>AWS(EC2, Lambda, API Gateway, S3)</td>
+                    </tr>
+                </table>
+            </details>
+        </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
 
     <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1 id="experiences-title">Experiences</h1>
-            <article>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
-                </p>
-                <p>
-                    Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
-                </p>
-            </article>
             <ul class="cards-list experiences">
                 <li>
-                    <h2>Experience 1</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc.</p>
+                    <h2>Lutech S.p.A.</h2>
+                    <p>One-year internship at Lutech S.p.A., an Italian leader and European competitor in ICT solutions with over 4,000 professionals.</p>
+                    <p>In the first six months I worked on programming with Ruby and Ruby on Rails and on the development of custom plugins for the internal ticketing portal.</p>
+                    <p>I then moved on to developing AI for classifying internal ITMS tickets and searching for similar tickets already resolved by applying Fasttext.</p>
                 </li>
                 <li>
-                    <h2>Experience 2</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc.</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc.</p>
+                    <h2>PowerUp BI</h2>
+                    <p>Junior Developer at PowerUp BI,Information Driven Processes Company.</p>
+                    <p>For a client in the pharmaceutical sector, I worked on Multichannel Marketing and Datawarehouse. The project was written in Javascript through AWS Lambda functions and database queries (MySQL) to obtain data useful for customizing the newsletters.</p>
+                </li>
+                <li>
+                    <h2>TeraTron GmbH</h2>
+                    <p>Junior Developer at TeraTron GmbH.</p>
+                    <p>Two-week residential experience in a German company specialized in RFID solutions, security and automotive.</p>
                 </li>
             </ul>
-        </div>        
+        </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
 
     <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1 id="certs-title">Education and certifications</h1>
             <article>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
+                    03/10/2022 – current<br>
+                    <i>Milan, Italy</i><br>
+                    Enrolled in the Faculty of Computer Science at <a href="https://www.unimib.it/">Bicocca University</a><br>
                 </p>
                 <p>
-                    Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
+                    2022<br>
+                    <i>Milan, Italy</i><br>
+                    <a href="https://www.ettoreconti.edu.it/">Ettore Conti Scientific High School</a> Diploma - Applied Sciences <br>
                 </p>
             </article>
-        </div>        
+        </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
 
     <section class="row">
-        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>        
+        <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
         <div class="col-12 col-md-10 col-lg-8 col-xxl-6">
             <h1 id="contacts-title">Contacts</h1>
             <article>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut tellus auctor, finibus velit eu, bibendum nunc. 
+                    <a href="mailto:marco.donna03@gmail.com">marco.donna03@gmail.com</a>
                 </p>
                 <p>
-                    Duis vel felis sit amet magna tempor consequat. Ut eget magna vitae mauris semper pharetra ac eu sapien. Integer pulvinar ligula ut arcu ultrices, in blandit massa vestibulum.
+                    <a href="https://github.com/MarcoDonna">Github</a>
+                </p>
+                <p>
+                    <!--<a href="">Linkedin</a>-->
                 </p>
             </article>
-        </div>        
+        </div>
         <div class="hidden col-md-1 col-lg-2 col-xxl-3"></div>
     </section>
 
@@ -246,6 +273,11 @@
             addCheckpoint('#experiences-title', '100%', () => typewriterEffect('#experiences-title', 160, 100));
             addCheckpoint('#certs-title', '100%', () => typewriterEffect('#certs-title', 160, 100));
             addCheckpoint('#contacts-title', '100%', () => typewriterEffect('#contacts-title', 160, 100));
+
+            $('.wip').on('click', ev => {
+                ev.preventDefault();
+                alert("Hey, this page is not ready yet!")
+            })
         });
     </script>
 </body>
